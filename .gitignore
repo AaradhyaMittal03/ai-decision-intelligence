@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Generated data/models (keep small sample data only)
+data/generated/
+data/raw_events.csv
+data/decision_intelligence.db
+data/*.db
+artifacts/*.joblib
+artifacts/*.json
+!artifacts/.gitkeep
+
+# OS/editor
+.DS_Store
+.vscode/
+.idea/

@@ -1,0 +1,9 @@
+# Optional convenience for a later containerized version. Current beginner MVP runs directly in Python.
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+      - ./artifacts:/app/artifacts

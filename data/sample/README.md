@@ -1,0 +1,1 @@
+Generated datasets are intentionally not committed. Run `python -m decision_intelligence.pipeline --events 10000` to generate your own local data. This keeps the repository lightweight and reproducible.
