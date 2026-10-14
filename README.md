@@ -1,248 +1,628 @@
 # 🤖 AI-Powered Decision Intelligence Platform
 
-An end-to-end data analytics and machine learning project that turns product-event data into business metrics, user-behavior predictions, anomaly alerts, and evidence-backed answers to natural-language questions.
+**A data engineering and analytics platform for business event processing, data quality monitoring, and operational decision-making.**
 
-**Project status:** Working local MVP. The current version includes synthetic event generation, data-quality validation, SQLite analytics, baseline ML, anomaly detection, FastAPI, and a Streamlit dashboard. Kafka, PySpark, dbt, Airflow, and cloud deployment are planned extensions and are not claimed as implemented yet.
+The AI-Powered Decision Intelligence Platform is a Python-based project designed to process business events, validate incoming data, store accepted and rejected records, and present operational metrics through an interactive Streamlit dashboard.
 
----
+The project combines event-streaming concepts, PostgreSQL storage, data validation, automated testing, and interactive analytics in one workspace.
 
-## 📊 Dashboard Preview
+<p align="center">
+  <img src="docs/images/executive-overview.png" alt="Executive Overview dashboard" width="100%" />
+</p>
 
-> **Add screenshots here after running the project.** Save screenshots in `screenshots/` and replace the examples below with the real filenames.
->
-> Suggested screenshots:
-> - `screenshots/overview.png` — KPI overview and daily trends
-> - `screenshots/anomalies.png` — anomaly findings
-> - `screenshots/ai-analyst.png` — natural-language analyst response
-
-<!-- Uncomment after adding screenshots:
-![Dashboard overview](screenshots/overview.png)
-![Anomaly detection](screenshots/anomalies.png)
-![AI analyst](screenshots/ai-analyst.png)
--->
+<p align="center">
+  <b>Python · Apache Kafka · PostgreSQL · Streamlit · Pandas · Plotly · Docker</b>
+</p>
 
 ---
 
-## 🎯 What This Project Demonstrates
+## 📑 Table of Contents
 
-- **Data engineering:** generates event data, validates records, cleans invalid rows, and loads data into an analytical store.
-- **SQL and analytics:** calculates product KPIs and daily/device/country breakdowns.
-- **Machine learning:** trains and evaluates a baseline model to predict whether a synthetic user will become inactive in the next seven days.
-- **Anomaly detection:** flags unusual daily traffic and latency using an explainable statistical baseline.
-- **AI-assisted analysis:** answers a set of natural-language business questions using predefined, parameterized SQL queries; an optional LLM can explain the computed evidence.
-- **Application development:** exposes analytics through FastAPI and presents results in a Streamlit dashboard.
-- **Software quality:** includes automated tests, repeatable commands, configuration examples, and documentation.
-
----
-
-## 🔎 Example Business Questions
-
-The platform is designed to help investigate questions such as:
-
-- How many events were processed?
-- What was the conversion rate yesterday?
-- How does revenue vary by device?
-- Which country generated the most events?
-- What is the average page latency?
-- Were any traffic or latency anomalies detected?
-- Which users are predicted to become inactive in the next seven days?
-
-The analyst uses a safe intent router and predefined SQL rather than executing arbitrary, untrusted model-generated SQL.
+- [Overview](#-overview)
+- [Key Features](#-key-features)
+- [Dashboard Preview](#-dashboard-preview)
+- [System Architecture](#-system-architecture)
+- [Technology Stack](#-technology-stack)
+- [Project Structure](#-project-structure)
+- [Prerequisites](#-prerequisites)
+- [Installation and Setup](#-installation-and-setup)
+- [Environment Configuration](#-environment-configuration)
+- [Running the Application](#-running-the-application)
+- [Data Validation and Quality](#-data-validation-and-quality)
+- [Database Design](#-database-design)
+- [Testing](#-testing)
+- [Troubleshooting](#-troubleshooting)
+- [Future Improvements](#-future-improvements)
 
 ---
 
-## 🏗️ Architecture
+## 🎯 Overview
+
+Modern applications generate business events such as page views, registrations, shopping-cart additions, and purchases. These events become useful only when they can be validated, stored reliably, monitored, and converted into meaningful insights.
+
+This project explores how to build that workflow using a modular data engineering architecture.
+
+The platform focuses on four areas:
+
+1. **Event ingestion:** Generate and process structured business events.
+2. **Data validation:** Identify missing fields, invalid event types, negative amounts, and invalid timestamps.
+3. **Reliable storage:** Store accepted events and rejected records in PostgreSQL while handling duplicate event IDs.
+4. **Operational analytics:** Visualize event activity and data quality metrics through a Streamlit dashboard.
+
+The project is intended as a portfolio demonstration of data engineering, backend development, database operations, and analytics.
+
+## ✨ Key Features
+
+### 1. Business Event Processing
+
+- Generate structured business events.
+- Work with event types such as `page_view`, `signup`, `add_to_cart`, and `purchase`.
+- Use unique event IDs to identify individual records.
+- Prepare events for processing through a Kafka producer and consumer workflow.
+
+### 2. Event Validation
+
+The validation module checks incoming events for issues such as:
+
+- Missing required fields.
+- Unsupported event types.
+- Invalid identifiers or field types.
+- Negative or invalid monetary amounts.
+- Invalid timestamps.
+
+Invalid records can be routed to rejected-event storage with explanations of the validation failures.
+
+### 3. PostgreSQL Integration
+
+- Store accepted business events in PostgreSQL.
+- Store rejected event payloads and validation reasons.
+- Use database constraints to protect data integrity.
+- Handle duplicate event IDs using conflict-aware inserts.
+- Use database operations that support repeatable processing.
+
+### 4. Interactive Analytics Dashboard
+
+- Monitor total processed events.
+- Compare valid and rejected events.
+- Track rejection rates.
+- Explore event distribution.
+- Inspect validation failure reasons.
+- Filter events by date and event type.
+- Search using event or user IDs.
+- Download filtered event records as CSV.
+
+### 5. Automated Testing
+
+The project includes unit tests for event validation, database operations, rejected-event handling, data quality reporting, and related functionality.
+
+A PostgreSQL integration test can also verify event insertion and duplicate handling against a real database.
+
+---
+
+## 📸 Dashboard Preview
+
+The dashboard contains three main views designed to make event activity and data quality easier to understand.
+
+### 1. Executive Overview
+
+Provides a high-level view of platform health, including processed events, accepted and rejected records, rejection rate, event distribution, and validation failures.
+
+<p align="center">
+  <img src="docs/images/executive-overview.png" alt="Executive Overview showing event metrics and analytics charts" width="100%" />
+</p>
+
+**What it demonstrates:**
+- Business and operational KPIs.
+- Event distribution across event types.
+- Validation failure summaries.
+- Date-based filtering.
+
+### 2. Event Monitoring
+
+Provides an interactive view of accepted business events stored in PostgreSQL.
+
+<p align="center">
+  <img src="docs/images/event-monitoring.png" alt="Event Monitoring showing event filters and event records" width="100%" />
+</p>
+
+**What it demonstrates:**
+- Filtering by event type.
+- Searching event and user IDs.
+- Inspecting event IDs, product IDs, amounts, and timestamps.
+- Exporting filtered records to CSV.
+
+### 3. Data Quality
+
+Provides visibility into rejected events and the reasons incoming records failed validation.
+
+<p align="center">
+  <img src="docs/images/data-quality.png" alt="Data Quality dashboard showing rejection metrics and validation failure reasons" width="100%" />
+</p>
+
+**What it demonstrates:**
+- Processed and rejected event counts.
+- Rejection-rate monitoring.
+- Validation failure analysis.
+- Rejected-event record inspection.
+
+---
+
+## 🏗️ System Architecture
+
+The project separates event generation, validation, storage, and analytics into distinct components.
+
+### High-level data flow
 
 ```mermaid
 flowchart TD
-    A[Synthetic Event Generator] --> B[Raw CSV Events]
-    B --> C[Data Validation and Cleaning]
-    C --> D[(SQLite Analytical Store)]
-    D --> E[Daily KPI Aggregations]
-    D --> F[Feature Engineering]
-    F --> G[Inactivity Prediction Model]
-    D --> H[Statistical Anomaly Detection]
-    E --> I[FastAPI]
-    G --> I
-    H --> I
-    I --> J[Streamlit Dashboard]
-    I --> K[Natural-Language Analyst]
+    A[Business Event Producer] --> B[Apache Kafka]
+    B --> C[Event Consumer]
+    C --> D{Validate Event}
+    D -->|Valid| E[PostgreSQL: Business Events]
+    D -->|Invalid| F[PostgreSQL: Rejected Events]
+    E --> G[Streamlit Dashboard]
+    F --> G
+    G --> H[Operational Metrics and Data Quality Insights]
 ```
 
-### Technology stack
+### Component responsibilities
 
-| Area | Technologies |
+| Component | Responsibility |
 |---|---|
-| Language and data processing | Python, Pandas, SQL |
-| Storage | SQLite |
-| Machine learning | scikit-learn |
-| API | FastAPI, Uvicorn |
-| Dashboard | Streamlit |
-| Testing | Pytest |
-| Optional AI explanations | OpenAI API |
+| Producer | Generates structured business events and publishes messages. |
+| Kafka | Provides a messaging layer for event delivery. |
+| Consumer | Reads incoming messages and coordinates validation and persistence. |
+| Validation module | Checks required fields, event types, amounts, and timestamps. |
+| PostgreSQL | Stores accepted events and rejected-event records. |
+| Streamlit | Presents event activity and data quality metrics. |
+| Pytest | Tests validation rules, database behavior, and reporting logic. |
+| Docker Compose | Defines container services for local development, including Kafka. |
+
+The diagram represents the intended event-processing flow. Actual end-to-end Kafka behavior depends on configuring and running the producer, broker, consumer, and database together.
 
 ---
 
-## 📈 Results and Evaluation
+## 🛠️ Technology Stack
 
-Model metrics and data-quality counts are generated by running the pipeline locally. They are intentionally not hard-coded here: the results should come from a reproducible run of the code.
-
-After running the commands below, review:
-
-- `artifacts/model_metrics.json` — model evaluation metrics
-- the pipeline output — input, cleaned, rejected, and loaded record counts
-- the dashboard and API — KPI and anomaly outputs
-
-**Important:** The data is synthetic. Model performance on this generated dataset is a demonstration of the workflow, not evidence of performance on real users or production data.
+| Technology | Purpose |
+|---|---|
+| Python | Core application and data processing |
+| Apache Kafka | Event streaming and message delivery |
+| PostgreSQL | Relational database and persistent storage |
+| SQL | Data retrieval, insertion, and analytics |
+| Streamlit | Interactive dashboard |
+| Pandas | Tabular data processing |
+| Plotly | Interactive charts and visualizations |
+| Psycopg | PostgreSQL connectivity |
+| python-dotenv | Environment variable management |
+| Docker | Containerization |
+| Docker Compose | Local service orchestration |
+| Pytest | Automated testing |
+| Git and GitHub | Version control and project hosting |
 
 ---
 
-## 📁 Project Structure
+## 📂 Project Structure
+
+The repository contains the following main components. Some additional files may exist in the project.
 
 ```text
 ai-decision-intelligence/
-├── data/                       # Generated data and local database (not committed)
-├── artifacts/                  # Local model and evaluation outputs (not committed)
-├── docs/                       # Architecture and data dictionary
-├── src/decision_intelligence/
-│   ├── config.py                # Paths and settings
-│   ├── generate.py              # Reproducible synthetic event generation
-│   ├── quality.py               # Data-quality checks and cleaning
-│   ├── storage.py               # SQLite schema and analytical queries
-│   ├── pipeline.py              # Generate -> validate -> load workflow
-│   ├── features.py               # User-level ML features and labels
-│   ├── train.py                  # Model training and evaluation
-│   ├── anomalies.py               # Statistical anomaly detection
-│   ├── analyst.py                 # Safe natural-language query routing
-│   └── api.py                     # FastAPI endpoints
-├── tests/                        # Automated tests
-├── dashboard.py                  # Streamlit interface
-├── pyproject.toml                # Project metadata and dependencies
-├── Dockerfile                    # Container build configuration
-├── docker-compose.yml             # Local container configuration
-├── .env.example                  # Example environment variables
-├── .gitignore                    # Excludes generated files and secrets
+│
+├── .github/                         # GitHub configuration
+├── artifacts/                       # Generated project artifacts
+├── data/                            # Project data files
+├── docs/
+│   ├── images/
+│   │   ├── executive-overview.png
+│   │   ├── event-monitoring.png
+│   │   └── data-quality.png
+│   ├── ai_evaluation.md
+│   ├── architecture.md
+│   └── data_dictionary.md
+│
+├── scripts/
+│   ├── quality_report.py
+│   └── test_database.py
+│
+├── src/
+│   ├── ai_decision_intelligence/
+│   │   └── streaming/
+│   └── decision_intelligence/
+│       ├── dashboard/
+│       │   └── app.py
+│       └── streaming/
+│           ├── consumer.py
+│           ├── database.py
+│           ├── producer.py
+│           └── validation.py
+│
+├── tests/
+│   ├── test_analyst.py
+│   ├── test_generator.py
+│   ├── test_quality.py
+│   ├── test_quality_report.py
+│   ├── test_rejected_events.py
+│   ├── test_streaming_database.py
+│   ├── test_streaming_database_integration.py
+│   └── test_streaming_validation.py
+│
+├── .env.example
+├── .gitignore
+├── Dockerfile
+├── docker-compose.yml
+├── Makefile
+├── pyproject.toml
 └── README.md
 ```
 
+**Important files:**
+
+- `producer.py` — creates and publishes business events.
+- `consumer.py` — consumes events and coordinates validation and storage.
+- `validation.py` — contains event validation rules.
+- `database.py` — implements PostgreSQL connection and persistence operations.
+- `app.py` — provides the Streamlit dashboard.
+- `quality_report.py` — generates a data quality report.
+- `test_database.py` — helps verify the database connection and table setup.
+- `docker-compose.yml` — defines local container services.
+- `pyproject.toml` — defines project metadata, dependencies, and tool configuration.
+
 ---
 
-## 🚀 Run This Project Locally
+## ⚙️ Prerequisites
 
-### Requirements
+Install the following before running the project:
 
-- Python 3.10 or newer
-- Git
-- Internet access for installing dependencies
+- Python 3.11 or a compatible Python version.
+- Git.
+- Docker Desktop with Docker Compose.
+- PostgreSQL, accessible through a local installation or container.
+- A terminal and a code editor such as VS Code.
 
-### 1. Clone the repository
+A Kafka broker is needed for the streaming workflow. PostgreSQL must be accessible for the database-backed dashboard and integration tests.
+
+---
+
+## 🚀 Installation and Setup
+
+### Step 1: Clone the repository
 
 ```bash
-git clone https://github.com/YOUR_GITHUB_USERNAME/ai-decision-intelligence.git
+git clone https://github.com/AaradhyaMittal03/ai-decision-intelligence.git
 cd ai-decision-intelligence
 ```
 
-Replace `YOUR_GITHUB_USERNAME` with your GitHub username. If you downloaded the ZIP instead, extract it and open a terminal in the project folder.
+### Step 2: Create a virtual environment
 
-### 2. Create and activate a virtual environment
-
-**macOS / Linux**
+On macOS or Linux:
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
 ```
 
-**Windows PowerShell**
+On Windows PowerShell:
 
 ```powershell
-py -m venv .venv
+python -m venv .venv
 .venv\Scripts\Activate.ps1
 ```
 
-### 3. Install dependencies
+### Step 3: Install dependencies
+
+Upgrade pip and install the project:
 
 ```bash
 python -m pip install --upgrade pip
-python -m pip install -e ".[dev]"
+pip install -e .
 ```
 
-### 4. Generate events, validate them, and load the database
+Install the testing dependency if it is not already installed:
 
 ```bash
-python -m decision_intelligence.pipeline --events 100000
+pip install pytest
 ```
 
-For a quicker first run, use `--events 10000`. The pipeline creates local data files and reports data-quality counts.
-
-### 5. Train and evaluate the model
+Verify installed dependencies:
 
 ```bash
-python -m decision_intelligence.train
+pip check
 ```
 
-The command prints evaluation metrics and writes a report under `artifacts/`.
+### Step 4: Configure environment variables
 
-### 6. Launch the API
+Create a local `.env` file in the project root using `.env.example` as a reference.
 
 ```bash
-uvicorn decision_intelligence.api:app --reload
+cp .env.example .env
 ```
 
-Open the interactive API documentation at [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs).
+Edit `.env` with your local PostgreSQL connection details.
 
-### 7. Launch the dashboard
+**Never commit your real `.env` file or expose database passwords in your repository.**
 
-Open a second terminal in the project directory, activate the virtual environment, and run:
+### Step 5: Start the required services
+
+Start the Kafka service defined in Docker Compose:
 
 ```bash
-streamlit run dashboard.py
+docker compose up -d kafka
 ```
 
-Open the local URL printed in the terminal, usually [http://localhost:8501](http://localhost:8501).
-
-### 8. Run tests
+Check the service status:
 
 ```bash
-pytest -q
+docker compose ps
 ```
+
+Make sure PostgreSQL is also running and reachable using the credentials configured in `.env`.
+
+The supplied Compose configuration defines Kafka; use the PostgreSQL setup appropriate to your local environment.
 
 ---
 
-## 🧪 Data Definitions and Limitations
+## 🔐 Environment Configuration
 
-- **Event:** one recorded synthetic product interaction.
-- **Conversion rate:** converted events divided by all events in this simplified demonstration. A production metric should define the eligible session/event denominator precisely.
-- **Inactive in seven days:** a synthetic label derived from generated activity, intended for demonstrating a modelling workflow—not for real customer decisions.
-- **Anomaly:** a daily traffic or latency value outside a robust median/MAD threshold. This is an interpretable baseline, not a universal anomaly detector.
-- **AI analyst:** natural-language questions are mapped to approved query patterns. Optional LLM explanations use computed evidence; the LLM is not given unrestricted database access.
+The database module reads these environment variables:
 
----
+| Variable | Purpose | Example for local development |
+|---|---|---|
+| `DB_HOST` | PostgreSQL host | `localhost` |
+| `DB_PORT` | PostgreSQL port | `5432` |
+| `DB_NAME` | Database name | `decision_intelligence` |
+| `DB_USER` | Database user | `analytics_user` |
+| `DB_PASSWORD` | Database password | Your local password |
 
-## 🛣️ Roadmap
+Example `.env` configuration:
 
-- [ ] Add Kafka producer/consumer for event streaming.
-- [ ] Add PySpark transformations and larger-scale processing benchmarks.
-- [ ] Add PostgreSQL and dbt staging/mart models with data tests.
-- [ ] Orchestrate repeatable jobs with Apache Airflow.
-- [ ] Add a fixed AI-analyst evaluation set and measure answer correctness, evidence coverage, latency, and cost.
-- [ ] Add CI with GitHub Actions, linting, and test execution.
-- [ ] Add real screenshots, benchmark results, and deployment instructions after validating them.
+```dotenv
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=decision_intelligence
+DB_USER=analytics_user
+DB_PASSWORD=replace_with_your_local_password
+```
 
----
+These are example local-development settings. Update them to match your PostgreSQL configuration.
 
-## 🔐 Configuration and Data Safety
-
-- Never commit API keys, passwords, `.env` files, generated databases, or private datasets.
-- `.env.example` contains placeholders only; add your own local `.env` only if needed.
-- All current example event data is synthetic and contains no real customer information.
+The Kafka producer also has a broker address configured in its code. Ensure that the producer and consumer use a broker address reachable from where they run.
 
 ---
 
-## 👩‍💻 About
+## ▶️ Running the Application
 
-Built as a learning and portfolio project to demonstrate an end-to-end workflow across analytics, data quality, machine learning, API development, and AI-assisted investigation.
+### 1. Verify PostgreSQL connectivity
+
+With your virtual environment activated and `.env` configured, run:
+
+```bash
+python scripts/test_database.py
+```
+
+The connection check should succeed if PostgreSQL is running, the credentials are correct, and the required database is available.
+
+### 2. Start the dashboard
+
+From the project root, run:
+
+```bash
+PYTHONPATH=src streamlit run src/decision_intelligence/dashboard/app.py --server.port 8501
+```
+
+Open the dashboard in your browser:
+
+**http://localhost:8501**
+
+The dashboard queries PostgreSQL for event and data quality metrics.
+
+To stop Streamlit, press `Ctrl + C` in the terminal running the application.
+
+### 3. Run the streaming producer and consumer
+
+The streaming components are located in:
+
+```text
+src/decision_intelligence/streaming/
+├── producer.py
+├── consumer.py
+├── database.py
+└── validation.py
+```
+
+Before running the pipeline, ensure Kafka and PostgreSQL are running and the topic and broker configuration match the application settings.
+
+The producer publishes generated business events. The consumer processes messages, validates event payloads, and stores accepted or rejected records.
+
+Use the entry-point instructions defined in the respective modules. If you run the modules directly, first verify that their `__main__` entry points are present and that their broker configuration is correct.
+
+---
+
+## 🧹 Data Validation and Quality
+
+Data quality is an important part of the event-processing workflow.
+
+The validation module checks incoming event payloads before they are accepted into the main business-events table.
+
+Examples of validation issues include:
+
+| Validation check | Example issue |
+|---|---|
+| Required fields | Missing event ID or timestamp |
+| Event type | An unsupported event type |
+| Amount | A negative monetary amount |
+| Timestamp | An invalid timestamp value |
+| Field types | An identifier or amount with an invalid type |
+
+Accepted records are stored in `business_events`. Rejected records are stored in `rejected_events`, along with their original payload and validation reasons.
+
+The dashboard summarizes these results to help identify common data quality issues.
+
+### Duplicate handling
+
+The database uses conflict-aware inserts for event IDs. This allows the application to detect whether an event was inserted or whether an existing event ID was encountered again.
+
+Rejected-event storage also uses a unique index for usable, non-null event IDs to prevent duplicate rejected records from being inserted for the same ID.
+
+---
+
+## 🗄️ Database Design
+
+### `business_events`
+
+Stores accepted business events.
+
+| Column | Description |
+|---|---|
+| `event_id` | Unique event identifier and primary key |
+| `event_type` | Type of business event |
+| `user_id` | Identifier of the user associated with the event |
+| `product_id` | Identifier of the associated product |
+| `amount` | Non-negative monetary amount |
+| `event_timestamp` | Timestamp associated with the event |
+| `received_at` | Database receipt timestamp |
+
+### `rejected_events`
+
+Stores records that fail validation.
+
+| Column | Description |
+|---|---|
+| `id` | Database-generated primary key |
+| `event_id` | Usable event identifier, when available |
+| `event_payload` | Original rejected event stored as JSONB |
+| `rejection_reasons` | List of validation errors |
+| `rejected_at` | Timestamp when the rejected record was stored |
+
+The rejected-event table supports records without a usable event ID. When an ID is present, a partial unique index enforces uniqueness for non-null IDs.
+
+---
+
+## 🧪 Testing
+
+The project uses Pytest for automated testing.
+
+### Run the standard test suite
+
+```bash
+pytest -v
+```
+
+### Run the suite with PostgreSQL integration testing enabled
+
+```bash
+RUN_DB_INTEGRATION_TESTS=1 pytest -v
+```
+
+The second command enables the integration test that verifies event insertion and duplicate handling against PostgreSQL. Ensure the database is running and configured correctly before executing it.
+
+### Test coverage areas
+
+- Event validation rules.
+- Missing and invalid event fields.
+- Database insertion and duplicate handling.
+- Rejected-event storage.
+- Data quality calculations.
+- Analyst and generator behavior.
+- PostgreSQL integration.
+
+**Verified project result:** The complete test suite returned **18 passed in 1.10 seconds**, including the PostgreSQL integration test, in the development environment.
+
+Test results may differ on another machine depending on the environment, dependencies, and database configuration.
+
+---
+
+## 🛠️ Troubleshooting
+
+### PostgreSQL connection errors
+
+Check that:
+
+- PostgreSQL is running.
+- `.env` exists in the project root.
+- The database name, user, password, host, and port are correct.
+- The database user has the required permissions.
+
+Run the database check again:
+
+```bash
+python scripts/test_database.py
+```
+
+### Streamlit cannot import project modules
+
+Run the dashboard from the repository root using the documented command:
+
+```bash
+PYTHONPATH=src streamlit run src/decision_intelligence/dashboard/app.py --server.port 8501
+```
+
+Ensure the virtual environment is activated.
+
+### Kafka connection errors
+
+Check the broker status:
+
+```bash
+docker compose ps
+```
+
+Review the Kafka listener configuration and confirm that the address used by the producer and consumer is reachable from their execution environment.
+
+### Dashboard shows no data
+
+Confirm that PostgreSQL contains event records and that the database connection settings match those used by the application.
+
+### Integration tests fail
+
+Ensure PostgreSQL is available, `.env` is correctly configured, and the test database can create or access the required tables.
+
+---
+
+## 🔮 Future Improvements
+
+Potential improvements for future iterations include:
+
+- End-to-end Kafka integration tests covering producer-to-consumer processing.
+- Stronger timestamp and numeric validation, including edge cases.
+- Improved observability with structured logs and operational metrics.
+- Configurable retry and dead-letter handling.
+- Additional business KPIs and time-series analytics.
+- More extensive database migration management.
+- CI automation for tests and code quality checks.
+- Deployment to a cloud environment.
+- Expanded architecture documentation and performance testing.
+
+These are potential extensions rather than claims that every item is already implemented.
+
+---
+
+## 🎓 Learning Outcomes
+
+This project brings together practical concepts from data engineering, backend development, and analytics:
+
+- Designing structured event-processing workflows.
+- Working with Kafka producers and consumers.
+- Validating incoming data and handling rejected records.
+- Using PostgreSQL constraints and conflict-aware inserts.
+- Building interactive analytics dashboards with Streamlit and Plotly.
+- Writing automated unit and integration tests.
+- Configuring local services using Docker Compose.
+- Documenting software so other developers can reproduce the setup.
+
+---
+
+## 👩‍💻 Author
+
+**Shiwani Verma**
+
+Computer Science Engineering | Software Development | Data Engineering | Analytics
+
+- GitHub: [@shiwaniverma2060](https://github.com/shiwaniverma2060)
+- Project repository: [AI-Powered Decision Intelligence Platform](https://github.com/AaradhyaMittal03/ai-decision-intelligence)
+
+---
 
 ## 📄 License
 
-MIT — see [`LICENSE`](LICENSE).
+This project includes a `LICENSE` file. Refer to that file for the applicable license terms.
