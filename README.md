@@ -1,159 +1,137 @@
 # 🤖 AI-Powered Decision Intelligence Platform
 
-**A data engineering and analytics platform for business event processing, data quality monitoring, and operational decision-making.**
-
-The AI-Powered Decision Intelligence Platform is a Python-based project designed to process business events, validate incoming data, store accepted and rejected records, and present operational metrics through an interactive Streamlit dashboard.
-
-The project combines event-streaming concepts, PostgreSQL storage, data validation, automated testing, and interactive analytics in one workspace.
-
 <p align="center">
-  <img src="docs/images/executive-overview.png" alt="Executive Overview dashboard" width="100%" />
+  <strong>A Data Engineering & Analytics Platform for Real-Time Event Processing, Data Quality Monitoring, and Operational Insights</strong>
 </p>
 
 <p align="center">
-  <b>Python · Apache Kafka · PostgreSQL · Streamlit · Pandas · Plotly · Docker</b>
+  <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python"/>
+  <img src="https://img.shields.io/badge/Apache%20Kafka-231F20?style=for-the-badge&logo=apachekafka&logoColor=white" alt="Apache Kafka"/>
+  <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL"/>
+  <img src="https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white" alt="Streamlit"/>
+  <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker"/>
+  <img src="https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white" alt="Pandas"/>
+  <img src="https://img.shields.io/badge/Plotly-3F4F75?style=for-the-badge&logo=plotly&logoColor=white" alt="Plotly"/>
 </p>
 
 ---
 
-## 📑 Table of Contents
+## 📌 Overview
 
-- [Overview](#-overview)
-- [Key Features](#-key-features)
-- [Dashboard Preview](#-dashboard-preview)
-- [System Architecture](#-system-architecture)
-- [Technology Stack](#-technology-stack)
-- [Project Structure](#-project-structure)
-- [Prerequisites](#-prerequisites)
-- [Installation and Setup](#-installation-and-setup)
-- [Environment Configuration](#-environment-configuration)
-- [Running the Application](#-running-the-application)
-- [Data Validation and Quality](#-data-validation-and-quality)
-- [Database Design](#-database-design)
-- [Testing](#-testing)
-- [Troubleshooting](#-troubleshooting)
-- [Future Improvements](#-future-improvements)
+The **AI-Powered Decision Intelligence Platform** is a Python-based data engineering and analytics project designed to process business events, validate incoming data, store accepted and rejected records in PostgreSQL, and visualize operational metrics through an interactive Streamlit dashboard.
+
+The project brings together event processing, database management, data validation, automated testing, and analytics in one modular application.
+
+### Key objectives
+
+- Process structured business events such as page views, signups, cart additions, and purchases.
+- Validate incoming data before accepting it into the main database.
+- Store rejected events with their validation failure reasons.
+- Handle duplicate event IDs safely.
+- Monitor operational metrics through an interactive dashboard.
+- Support testing of data validation and database operations.
 
 ---
-
-## 🎯 Overview
-
-Modern applications generate business events such as page views, registrations, shopping-cart additions, and purchases. These events become useful only when they can be validated, stored reliably, monitored, and converted into meaningful insights.
-
-This project explores how to build that workflow using a modular data engineering architecture.
-
-The platform focuses on four areas:
-
-1. **Event ingestion:** Generate and process structured business events.
-2. **Data validation:** Identify missing fields, invalid event types, negative amounts, and invalid timestamps.
-3. **Reliable storage:** Store accepted events and rejected records in PostgreSQL while handling duplicate event IDs.
-4. **Operational analytics:** Visualize event activity and data quality metrics through a Streamlit dashboard.
-
-The project is intended as a portfolio demonstration of data engineering, backend development, database operations, and analytics.
 
 ## ✨ Key Features
 
 ### 1. Business Event Processing
+- Structured business event payloads.
+- Event types such as `page_view`, `signup`, `add_to_cart`, and `purchase`.
+- Unique event identifiers for duplicate detection.
+- Producer and consumer modules for the Kafka streaming workflow.
 
-- Generate structured business events.
-- Work with event types such as `page_view`, `signup`, `add_to_cart`, and `purchase`.
-- Use unique event IDs to identify individual records.
-- Prepare events for processing through a Kafka producer and consumer workflow.
+### 2. Data Validation
+- Required-field validation.
+- Event-type validation.
+- Identifier and numeric-value checks.
+- Timestamp validation.
+- Rejected-event storage with validation reasons.
 
-### 2. Event Validation
-
-The validation module checks incoming events for issues such as:
-
-- Missing required fields.
-- Unsupported event types.
-- Invalid identifiers or field types.
-- Negative or invalid monetary amounts.
-- Invalid timestamps.
-
-Invalid records can be routed to rejected-event storage with explanations of the validation failures.
-
-### 3. PostgreSQL Integration
-
-- Store accepted business events in PostgreSQL.
-- Store rejected event payloads and validation reasons.
-- Use database constraints to protect data integrity.
-- Handle duplicate event IDs using conflict-aware inserts.
-- Use database operations that support repeatable processing.
+### 3. PostgreSQL Database
+- Persistent storage for accepted events.
+- Separate storage for rejected records.
+- Database constraints and conflict-aware inserts.
+- Duplicate-event handling.
 
 ### 4. Interactive Analytics Dashboard
-
-- Monitor total processed events.
-- Compare valid and rejected events.
-- Track rejection rates.
-- Explore event distribution.
-- Inspect validation failure reasons.
-- Filter events by date and event type.
-- Search using event or user IDs.
-- Download filtered event records as CSV.
+- Processed, valid, and rejected event metrics.
+- Rejection-rate monitoring.
+- Event distribution charts.
+- Validation failure analysis.
+- Date and event-type filtering.
+- Event and user ID search.
+- CSV export for filtered event records.
 
 ### 5. Automated Testing
-
-The project includes unit tests for event validation, database operations, rejected-event handling, data quality reporting, and related functionality.
-
-A PostgreSQL integration test can also verify event insertion and duplicate handling against a real database.
+- Unit tests for validation and database operations.
+- Tests for rejected-event handling.
+- Data quality reporting tests.
+- Optional PostgreSQL integration testing.
 
 ---
 
 ## 📸 Dashboard Preview
 
-The dashboard contains three main views designed to make event activity and data quality easier to understand.
+The platform includes three dashboard views. The screenshots below are stored in the repository and should appear directly on GitHub when their paths match the files in `docs/images/`.
 
 ### 1. Executive Overview
 
-Provides a high-level view of platform health, including processed events, accepted and rejected records, rejection rate, event distribution, and validation failures.
+A high-level view of platform activity, event distribution, and operational health.
 
-  <img src="docs/images/Executive%20Overview.png" alt="Executive Overview showing event metrics and analytics charts" width="100%" /> 
+<p align="center">
+  <img src="docs/images/executive-overview.png" alt="Executive Overview dashboard showing key metrics and event distribution" width="100%"/>
+</p>
 
-**What it demonstrates:**
-- Business and operational KPIs.
-- Event distribution across event types.
+**Highlights**
+- Total processed events.
+- Valid and rejected event counts.
+- Rejection rate.
+- Event distribution.
 - Validation failure summaries.
-- Date-based filtering.
 
 ### 2. Event Monitoring
 
-Provides an interactive view of accepted business events stored in PostgreSQL.
+An interactive view of business events stored in PostgreSQL.
 
-  <img src="docs/images/Event%20Monitoring.png" alt="Event Monitoring dashboard showing filtered events" width="100%" /> 
+<p align="center">
+  <img src="docs/images/event-monitoring.png" alt="Event Monitoring dashboard showing business event records" width="100%"/>
+</p>
 
-**What it demonstrates:**
-- Filtering by event type.
-- Searching event and user IDs.
-- Inspecting event IDs, product IDs, amounts, and timestamps.
-- Exporting filtered records to CSV.
+**Highlights**
+- Inspect stored event records.
+- Filter by event type and date.
+- Search event or user identifiers.
+- Review product IDs, amounts, and timestamps.
+- Export filtered records to CSV.
 
-### 3. Data Quality
+### 3. Data Quality Center
 
-Provides visibility into rejected events and the reasons incoming records failed validation.
+A focused view of rejected events and validation issues.
 
-  <img src="docs/images/Data%20Quality.png" alt="Data Quality dashboard showing rejected events and validation reasons" width="100%" /> 
+<p align="center">
+  <img src="docs/images/data-quality.png" alt="Data Quality dashboard showing rejected events and validation reasons" width="100%"/>
+</p>
 
-**What it demonstrates:**
-- Processed and rejected event counts.
+**Highlights**
+- Rejected-event counts.
 - Rejection-rate monitoring.
-- Validation failure analysis.
-- Rejected-event record inspection.
+- Common validation failure reasons.
+- Rejected-record inspection.
 
 ---
 
 ## 🏗️ System Architecture
 
-The project separates event generation, validation, storage, and analytics into distinct components.
-
-### High-level data flow
+The platform separates event generation, message delivery, validation, persistence, and analytics into individual components.
 
 ```mermaid
 flowchart TD
     A[Business Event Producer] --> B[Apache Kafka]
     B --> C[Event Consumer]
     C --> D{Validate Event}
-    D -->|Valid| E[PostgreSQL: Business Events]
-    D -->|Invalid| F[PostgreSQL: Rejected Events]
+    D -->|Valid| E[(PostgreSQL: Business Events)]
+    D -->|Invalid| F[(PostgreSQL: Rejected Events)]
     E --> G[Streamlit Dashboard]
     F --> G
     G --> H[Operational Metrics and Data Quality Insights]
@@ -163,16 +141,16 @@ flowchart TD
 
 | Component | Responsibility |
 |---|---|
-| Producer | Generates structured business events and publishes messages. |
-| Kafka | Provides a messaging layer for event delivery. |
-| Consumer | Reads incoming messages and coordinates validation and persistence. |
-| Validation module | Checks required fields, event types, amounts, and timestamps. |
-| PostgreSQL | Stores accepted events and rejected-event records. |
-| Streamlit | Presents event activity and data quality metrics. |
-| Pytest | Tests validation rules, database behavior, and reporting logic. |
-| Docker Compose | Defines container services for local development, including Kafka. |
+| Producer | Generates business events and publishes messages |
+| Apache Kafka | Provides message delivery for the streaming workflow |
+| Consumer | Processes incoming events |
+| Validation module | Checks event fields and values |
+| PostgreSQL | Stores accepted and rejected records |
+| Streamlit | Displays analytics and data quality metrics |
+| Pytest | Tests application behavior |
+| Docker Compose | Supports local container-based development |
 
-The diagram represents the intended event-processing flow. Actual end-to-end Kafka behavior depends on configuring and running the producer, broker, consumer, and database together.
+The architecture describes the intended streaming workflow. Full end-to-end processing requires the broker, producer, consumer, and database to be configured and running together.
 
 ---
 
@@ -180,32 +158,28 @@ The diagram represents the intended event-processing flow. Actual end-to-end Kaf
 
 | Technology | Purpose |
 |---|---|
-| Python | Core application and data processing |
-| Apache Kafka | Event streaming and message delivery |
-| PostgreSQL | Relational database and persistent storage |
-| SQL | Data retrieval, insertion, and analytics |
+| Python | Application logic and data processing |
+| Apache Kafka | Event streaming |
+| PostgreSQL | Relational data storage |
+| SQL | Database operations and analytics |
 | Streamlit | Interactive dashboard |
 | Pandas | Tabular data processing |
-| Plotly | Interactive charts and visualizations |
+| Plotly | Interactive visualizations |
 | Psycopg | PostgreSQL connectivity |
-| python-dotenv | Environment variable management |
+| python-dotenv | Environment configuration |
 | Docker | Containerization |
 | Docker Compose | Local service orchestration |
 | Pytest | Automated testing |
-| Git and GitHub | Version control and project hosting |
+| Git and GitHub | Version control |
 
 ---
 
 ## 📂 Project Structure
 
-The repository contains the following main components. Some additional files may exist in the project.
-
 ```text
 ai-decision-intelligence/
-│
-├── .github/                         # GitHub configuration
-├── artifacts/                       # Generated project artifacts
-├── data/                            # Project data files
+├── artifacts/
+├── data/
 ├── docs/
 │   ├── images/
 │   │   ├── executive-overview.png
@@ -214,14 +188,10 @@ ai-decision-intelligence/
 │   ├── ai_evaluation.md
 │   ├── architecture.md
 │   └── data_dictionary.md
-│
 ├── scripts/
 │   ├── quality_report.py
 │   └── test_database.py
-│
 ├── src/
-│   ├── ai_decision_intelligence/
-│   │   └── streaming/
 │   └── decision_intelligence/
 │       ├── dashboard/
 │       │   └── app.py
@@ -230,17 +200,7 @@ ai-decision-intelligence/
 │           ├── database.py
 │           ├── producer.py
 │           └── validation.py
-│
 ├── tests/
-│   ├── test_analyst.py
-│   ├── test_generator.py
-│   ├── test_quality.py
-│   ├── test_quality_report.py
-│   ├── test_rejected_events.py
-│   ├── test_streaming_database.py
-│   ├── test_streaming_database_integration.py
-│   └── test_streaming_validation.py
-│
 ├── .env.example
 ├── .gitignore
 ├── Dockerfile
@@ -250,31 +210,19 @@ ai-decision-intelligence/
 └── README.md
 ```
 
-**Important files:**
-
-- `producer.py` — creates and publishes business events.
-- `consumer.py` — consumes events and coordinates validation and storage.
-- `validation.py` — contains event validation rules.
-- `database.py` — implements PostgreSQL connection and persistence operations.
-- `app.py` — provides the Streamlit dashboard.
-- `quality_report.py` — generates a data quality report.
-- `test_database.py` — helps verify the database connection and table setup.
-- `docker-compose.yml` — defines local container services.
-- `pyproject.toml` — defines project metadata, dependencies, and tool configuration.
+Additional files and directories may exist in the repository.
 
 ---
 
 ## ⚙️ Prerequisites
 
-Install the following before running the project:
+Before running the project, install:
 
-- Python 3.11 or a compatible Python version.
+- Python 3.11 or a compatible version.
 - Git.
 - Docker Desktop with Docker Compose.
-- PostgreSQL, accessible through a local installation or container.
-- A terminal and a code editor such as VS Code.
-
-A Kafka broker is needed for the streaming workflow. PostgreSQL must be accessible for the database-backed dashboard and integration tests.
+- A PostgreSQL database.
+- A Kafka broker for the streaming workflow.
 
 ---
 
@@ -289,14 +237,14 @@ cd ai-decision-intelligence
 
 ### Step 2: Create a virtual environment
 
-On macOS or Linux:
+**macOS / Linux**
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
 ```
 
-On Windows PowerShell:
+**Windows PowerShell**
 
 ```powershell
 python -m venv .venv
@@ -305,70 +253,24 @@ python -m venv .venv
 
 ### Step 3: Install dependencies
 
-Upgrade pip and install the project:
-
 ```bash
 python -m pip install --upgrade pip
 pip install -e .
-```
-
-Install the testing dependency if it is not already installed:
-
-```bash
 pip install pytest
-```
-
-Verify installed dependencies:
-
-```bash
 pip check
 ```
 
 ### Step 4: Configure environment variables
 
-Create a local `.env` file in the project root using `.env.example` as a reference.
+Create your local `.env` file:
 
 ```bash
 cp .env.example .env
 ```
 
-Edit `.env` with your local PostgreSQL connection details.
+Update the database settings in `.env` to match your environment.
 
-**Never commit your real `.env` file or expose database passwords in your repository.**
-
-### Step 5: Start the required services
-
-Start the Kafka service defined in Docker Compose:
-
-```bash
-docker compose up -d kafka
-```
-
-Check the service status:
-
-```bash
-docker compose ps
-```
-
-Make sure PostgreSQL is also running and reachable using the credentials configured in `.env`.
-
-The supplied Compose configuration defines Kafka; use the PostgreSQL setup appropriate to your local environment.
-
----
-
-## 🔐 Environment Configuration
-
-The database module reads these environment variables:
-
-| Variable | Purpose | Example for local development |
-|---|---|---|
-| `DB_HOST` | PostgreSQL host | `localhost` |
-| `DB_PORT` | PostgreSQL port | `5432` |
-| `DB_NAME` | Database name | `decision_intelligence` |
-| `DB_USER` | Database user | `analytics_user` |
-| `DB_PASSWORD` | Database password | Your local password |
-
-Example `.env` configuration:
+Example configuration:
 
 ```dotenv
 DB_HOST=localhost
@@ -378,43 +280,52 @@ DB_USER=analytics_user
 DB_PASSWORD=replace_with_your_local_password
 ```
 
-These are example local-development settings. Update them to match your PostgreSQL configuration.
+These are example values; use your actual local database settings.
 
-The Kafka producer also has a broker address configured in its code. Ensure that the producer and consumer use a broker address reachable from where they run.
+**Security:** Never commit your real `.env` file or publish database passwords.
+
+### Step 5: Start the required services
+
+Start the services defined in your Docker Compose configuration:
+
+```bash
+docker compose up -d
+docker compose ps
+```
+
+Check the Compose configuration and ensure PostgreSQL and Kafka are running and reachable before using the database-backed or streaming features.
 
 ---
 
 ## ▶️ Running the Application
 
-### 1. Verify PostgreSQL connectivity
+### 1. Check the database connection
 
-With your virtual environment activated and `.env` configured, run:
+From the project root, with the virtual environment activated:
 
 ```bash
 python scripts/test_database.py
 ```
 
-The connection check should succeed if PostgreSQL is running, the credentials are correct, and the required database is available.
+The connection test should succeed when PostgreSQL is running and the credentials are correct.
 
 ### 2. Start the dashboard
-
-From the project root, run:
 
 ```bash
 PYTHONPATH=src streamlit run src/decision_intelligence/dashboard/app.py --server.port 8501
 ```
 
-Open the dashboard in your browser:
+Open:
 
 **http://localhost:8501**
 
-The dashboard queries PostgreSQL for event and data quality metrics.
+The dashboard retrieves event and data quality information from PostgreSQL.
 
-To stop Streamlit, press `Ctrl + C` in the terminal running the application.
+To stop the dashboard, press `Ctrl + C` in the terminal running Streamlit.
 
-### 3. Run the streaming producer and consumer
+### 3. Run the Kafka pipeline
 
-The streaming components are located in:
+The streaming modules are located in:
 
 ```text
 src/decision_intelligence/streaming/
@@ -424,39 +335,29 @@ src/decision_intelligence/streaming/
 └── validation.py
 ```
 
-Before running the pipeline, ensure Kafka and PostgreSQL are running and the topic and broker configuration match the application settings.
+Ensure that Kafka and PostgreSQL are running and that the broker address and topic settings match the application configuration.
 
-The producer publishes generated business events. The consumer processes messages, validates event payloads, and stores accepted or rejected records.
-
-Use the entry-point instructions defined in the respective modules. If you run the modules directly, first verify that their `__main__` entry points are present and that their broker configuration is correct.
+Use the producer and consumer entry points defined in the source files to start message generation and processing.
 
 ---
 
 ## 🧹 Data Validation and Quality
 
-Data quality is an important part of the event-processing workflow.
-
-The validation module checks incoming event payloads before they are accepted into the main business-events table.
-
-Examples of validation issues include:
+Incoming events are validated before being stored as accepted business events.
 
 | Validation check | Example issue |
 |---|---|
 | Required fields | Missing event ID or timestamp |
-| Event type | An unsupported event type |
-| Amount | A negative monetary amount |
-| Timestamp | An invalid timestamp value |
-| Field types | An identifier or amount with an invalid type |
+| Event type | Unsupported event type |
+| Amount | Negative monetary amount |
+| Timestamp | Invalid timestamp |
+| Field types | Invalid identifier or numeric type |
 
-Accepted records are stored in `business_events`. Rejected records are stored in `rejected_events`, along with their original payload and validation reasons.
-
-The dashboard summarizes these results to help identify common data quality issues.
+Accepted events are stored in `business_events`. Rejected events are stored in `rejected_events` with the original payload and validation reasons.
 
 ### Duplicate handling
 
-The database uses conflict-aware inserts for event IDs. This allows the application to detect whether an event was inserted or whether an existing event ID was encountered again.
-
-Rejected-event storage also uses a unique index for usable, non-null event IDs to prevent duplicate rejected records from being inserted for the same ID.
+Conflict-aware database inserts help prevent repeated event IDs from being inserted as new records. Rejected-event deduplication depends on the unique index and database logic configured for that table.
 
 ---
 
@@ -468,61 +369,47 @@ Stores accepted business events.
 
 | Column | Description |
 |---|---|
-| `event_id` | Unique event identifier and primary key |
+| `event_id` | Unique event identifier |
 | `event_type` | Type of business event |
-| `user_id` | Identifier of the user associated with the event |
-| `product_id` | Identifier of the associated product |
+| `user_id` | Associated user identifier |
+| `product_id` | Associated product identifier |
 | `amount` | Non-negative monetary amount |
-| `event_timestamp` | Timestamp associated with the event |
+| `event_timestamp` | Event timestamp |
 | `received_at` | Database receipt timestamp |
 
 ### `rejected_events`
 
-Stores records that fail validation.
+Stores events that fail validation.
 
 | Column | Description |
 |---|---|
-| `id` | Database-generated primary key |
-| `event_id` | Usable event identifier, when available |
-| `event_payload` | Original rejected event stored as JSONB |
-| `rejection_reasons` | List of validation errors |
-| `rejected_at` | Timestamp when the rejected record was stored |
-
-The rejected-event table supports records without a usable event ID. When an ID is present, a partial unique index enforces uniqueness for non-null IDs.
+| `id` | Database-generated record ID |
+| `event_id` | Event identifier, when available |
+| `event_payload` | Original event stored as JSONB |
+| `rejection_reasons` | Validation failure explanations |
+| `rejected_at` | Rejection storage timestamp |
 
 ---
 
 ## 🧪 Testing
 
-The project uses Pytest for automated testing.
-
-### Run the standard test suite
+Run the standard test suite:
 
 ```bash
 pytest -v
 ```
 
-### Run the suite with PostgreSQL integration testing enabled
+To enable the PostgreSQL integration test:
 
 ```bash
 RUN_DB_INTEGRATION_TESTS=1 pytest -v
 ```
 
-The second command enables the integration test that verifies event insertion and duplicate handling against PostgreSQL. Ensure the database is running and configured correctly before executing it.
+The integration test requires a working database and valid environment configuration.
 
-### Test coverage areas
+Test coverage includes event validation, database operations, rejected-event handling, data quality calculations, and integration behavior.
 
-- Event validation rules.
-- Missing and invalid event fields.
-- Database insertion and duplicate handling.
-- Rejected-event storage.
-- Data quality calculations.
-- Analyst and generator behavior.
-- PostgreSQL integration.
-
-**Verified project result:** The complete test suite returned **18 passed in 1.10 seconds**, including the PostgreSQL integration test, in the development environment.
-
-Test results may differ on another machine depending on the environment, dependencies, and database configuration.
+Test counts and results depend on the code version and environment. Run the commands above to verify the current state of the project.
 
 ---
 
@@ -530,79 +417,68 @@ Test results may differ on another machine depending on the environment, depende
 
 ### PostgreSQL connection errors
 
-Check that:
-
-- PostgreSQL is running.
-- `.env` exists in the project root.
-- The database name, user, password, host, and port are correct.
-- The database user has the required permissions.
-
-Run the database check again:
+- Ensure PostgreSQL is running.
+- Check the `.env` file.
+- Verify the host, port, database, username, and password.
+- Confirm the database user has the necessary permissions.
 
 ```bash
 python scripts/test_database.py
 ```
 
-### Streamlit cannot import project modules
+### Streamlit import errors
 
-Run the dashboard from the repository root using the documented command:
+Run the dashboard from the repository root:
 
 ```bash
 PYTHONPATH=src streamlit run src/decision_intelligence/dashboard/app.py --server.port 8501
 ```
 
-Ensure the virtual environment is activated.
-
 ### Kafka connection errors
-
-Check the broker status:
 
 ```bash
 docker compose ps
 ```
 
-Review the Kafka listener configuration and confirm that the address used by the producer and consumer is reachable from their execution environment.
+Check the broker's listener configuration and ensure the producer and consumer can reach it.
 
 ### Dashboard shows no data
 
-Confirm that PostgreSQL contains event records and that the database connection settings match those used by the application.
+Confirm that the database contains records and that the dashboard uses the correct database settings.
 
-### Integration tests fail
+### Dashboard screenshots do not appear on GitHub
 
-Ensure PostgreSQL is available, `.env` is correctly configured, and the test database can create or access the required tables.
+Check that all three image files are committed and pushed, and that their filenames match the paths in this README exactly.
 
 ---
 
 ## 🔮 Future Improvements
 
-Potential improvements for future iterations include:
-
-- End-to-end Kafka integration tests covering producer-to-consumer processing.
-- Stronger timestamp and numeric validation, including edge cases.
-- Improved observability with structured logs and operational metrics.
-- Configurable retry and dead-letter handling.
+- End-to-end Kafka integration tests.
+- Stronger timestamp and numeric validation.
+- Structured logging and operational monitoring.
+- Retry and dead-letter handling.
 - Additional business KPIs and time-series analytics.
-- More extensive database migration management.
-- CI automation for tests and code quality checks.
-- Deployment to a cloud environment.
-- Expanded architecture documentation and performance testing.
+- Database migration management.
+- Continuous integration for tests and code quality.
+- Cloud deployment and performance testing.
 
-These are potential extensions rather than claims that every item is already implemented.
+These are potential extensions, not claims that every feature is already implemented.
 
 ---
 
 ## 🎓 Learning Outcomes
 
-This project brings together practical concepts from data engineering, backend development, and analytics:
+This project demonstrates practical experience with:
 
-- Designing structured event-processing workflows.
-- Working with Kafka producers and consumers.
-- Validating incoming data and handling rejected records.
-- Using PostgreSQL constraints and conflict-aware inserts.
-- Building interactive analytics dashboards with Streamlit and Plotly.
-- Writing automated unit and integration tests.
-- Configuring local services using Docker Compose.
-- Documenting software so other developers can reproduce the setup.
+- Structured event-processing workflows.
+- Kafka producer and consumer concepts.
+- Data validation and rejected-record handling.
+- PostgreSQL constraints and conflict-aware inserts.
+- Interactive analytics with Streamlit and Plotly.
+- Automated unit and integration testing.
+- Container-based local development.
+- Technical documentation for reproducible setup.
 
 ---
 
@@ -612,11 +488,11 @@ This project brings together practical concepts from data engineering, backend d
 
 Computer Science Engineering | Software Development | Data Engineering | Analytics
 
-- GitHub: [@shiwaniverma2060](https://github.com/shiwaniverma2060)
-- Project repository: [AI-Powered Decision Intelligence Platform](https://github.com/AaradhyaMittal03/ai-decision-intelligence)
+- **GitHub:** [shiwaniverma2060](https://github.com/shiwaniverma2060)
+- **Project Repository:** [AI-Powered Decision Intelligence Platform](https://github.com/AaradhyaMittal03/ai-decision-intelligence)
 
 ---
 
 ## 📄 License
 
-This project includes a `LICENSE` file. Refer to that file for the applicable license terms.
+See the [`LICENSE`](LICENSE) file for the applicable license terms.
