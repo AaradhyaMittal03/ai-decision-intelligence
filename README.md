@@ -107,9 +107,7 @@ The dashboard contains three main views designed to make event activity and data
 
 Provides a high-level view of platform health, including processed events, accepted and rejected records, rejection rate, event distribution, and validation failures.
 
-<p align="center">
-  <img src="docs/images/executive-overview.png" alt="Executive Overview showing event metrics and analytics charts" width="100%" />
-</p>
+  <img src="docs/images/Executive%20Overview.png" alt="Executive Overview showing event metrics and analytics charts" width="100%" /> 
 
 **What it demonstrates:**
 - Business and operational KPIs.
@@ -121,9 +119,7 @@ Provides a high-level view of platform health, including processed events, accep
 
 Provides an interactive view of accepted business events stored in PostgreSQL.
 
-<p align="center">
-  <img src="docs/images/event-monitoring.png" alt="Event Monitoring showing event filters and event records" width="100%" />
-</p>
+  <img src="docs/images/Event%20Monitoring.png" alt="Event Monitoring dashboard showing filtered events" width="100%" /> 
 
 **What it demonstrates:**
 - Filtering by event type.
@@ -135,9 +131,7 @@ Provides an interactive view of accepted business events stored in PostgreSQL.
 
 Provides visibility into rejected events and the reasons incoming records failed validation.
 
-<p align="center">
-  <img src="docs/images/data-quality.png" alt="Data Quality dashboard showing rejection metrics and validation failure reasons" width="100%" />
-</p>
+  <img src="docs/images/Data%20Quality.png" alt="Data Quality dashboard showing rejected events and validation reasons" width="100%" /> 
 
 **What it demonstrates:**
 - Processed and rejected event counts.
